@@ -57,6 +57,22 @@
             <version>7.0.1</version>
         </dependency>
         <!-- GUICE -->
+
+        <!-- HBASE -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>3.0.0-alpha-4</version>
+        </dependency>
+        <!-- HBASE -->
+
+        <!-- LOMBOK -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+        </dependency>
+        <!-- LOMBOK -->
     </dependencies>
 
     <build>

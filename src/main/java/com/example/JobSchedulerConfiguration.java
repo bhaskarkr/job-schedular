@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.*;
 import jakarta.validation.constraints.*;
 
-public class jobschedulerConfiguration extends Configuration {
+public class JobSchedulerConfiguration extends Configuration {
     // TODO: implement service configuration
 }

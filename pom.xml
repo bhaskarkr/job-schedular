@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>4.0.4</dropwizard.version>
-        <mainClass>com.example.jobschedulerApplication</mainClass>
+        <mainClass>com.example.JobSchedulerApplication</mainClass>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +49,14 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+
+        <!-- GUICE -->
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>dropwizard-guicey</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+        <!-- GUICE -->
     </dependencies>
 
     <build>

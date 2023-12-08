@@ -1,6 +1,6 @@
 package com.example;
 
-import com.example.resources.ClientResources;
+import com.example.api.Client;
 import com.google.inject.Stage;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
@@ -32,7 +32,7 @@ public class JobSchedulerApplication extends Application<JobSchedulerConfigurati
     public void run(final JobSchedulerConfiguration configuration,
                     final Environment environment) {
         var injector = guiceBundle.getInjector();
-        environment.jersey().register(injector.getInstance(ClientResources.class));
+        environment.jersey().register(injector.getInstance(Client.class));
     }
 
 }

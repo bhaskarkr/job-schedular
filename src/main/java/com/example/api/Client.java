@@ -1,4 +1,4 @@
-package com.example.resources;
+package com.example.api;
 
 import com.google.common.collect.ImmutableList;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Path("/v1/clients")
 @Produces(MediaType.APPLICATION_JSON)
-public class ClientResources {
+public class Client {
 
     @GET
     public List<String> getAll() {

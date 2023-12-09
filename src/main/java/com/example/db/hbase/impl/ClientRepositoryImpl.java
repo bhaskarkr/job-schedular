@@ -2,7 +2,7 @@ package com.example.db.hbase.impl;
 
 import com.example.db.hbase.ClientRepository;
 import com.example.db.hbase.HBaseClient;
-import com.example.db.model.StoredClient;
+import com.example.model.dao.StoredClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import jakarta.ws.rs.BadRequestException;

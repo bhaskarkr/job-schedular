@@ -1,4 +1,4 @@
-package com.example.db.model;
+package com.example.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

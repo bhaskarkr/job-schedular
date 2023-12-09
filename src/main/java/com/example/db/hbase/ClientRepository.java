@@ -1,6 +1,6 @@
 package com.example.db.hbase;
 
-import com.example.db.model.StoredClient;
+import com.example.model.dao.StoredClient;
 
 import java.util.List;
 

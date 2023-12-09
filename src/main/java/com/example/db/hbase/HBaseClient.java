@@ -2,6 +2,7 @@ package com.example.db.hbase;
 
 import com.google.inject.Singleton;
 import io.dropwizard.lifecycle.Managed;
+import jakarta.ws.rs.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -29,7 +30,7 @@ public class HBaseClient implements Managed {
         try(Table table = connection.getTable(TableName.valueOf(tableName))) {
             return table;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new BadRequestException(e);
         }
     }
 

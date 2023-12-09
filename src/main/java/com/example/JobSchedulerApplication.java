@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.api.Client;
+import com.example.db.hbase.HBaseModule;
 import com.google.inject.Stage;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
@@ -24,6 +25,10 @@ public class JobSchedulerApplication extends Application<JobSchedulerConfigurati
     public void initialize(final Bootstrap<JobSchedulerConfiguration> bootstrap) {
         this.guiceBundle = GuiceBundle.builder()
                 .enableAutoConfig(getClass().getPackage().getName())
+                .modules(
+                        new HBaseModule(),
+                        new CoreModule()
+                )
                 .build(Stage.PRODUCTION);
         bootstrap.addBundle(guiceBundle);
     }

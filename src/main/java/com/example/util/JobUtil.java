@@ -15,7 +15,7 @@ import java.util.Objects;
  *  Date : 9 Dec 2023
  */
 public abstract class JobUtil {
-    private static Date nextDate(Date currentDate, long interval, ChronoUnit unit) {
+    public static Date nextDate(Date currentDate, long interval, ChronoUnit unit) {
         LocalDateTime local = LocalDateTime.ofInstant(currentDate.toInstant(), ZoneId.systemDefault());
         LocalDateTime future = local.plus(interval, unit);
         return Date.from(future.atZone(ZoneId.systemDefault()).toInstant());

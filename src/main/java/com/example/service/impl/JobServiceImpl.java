@@ -56,7 +56,7 @@ public class JobServiceImpl implements JobService {
     }
 
     private byte[] getTaskRowKey(String clientId, String jobId, Date executionDate) {
-        String key = String.format("%s:%020d:%s", clientId, executionDate.getTime(), jobId);
+        String key = String.format("%s:%015d:%s", clientId, executionDate.getTime(), jobId);
         return key.getBytes();
     }
 

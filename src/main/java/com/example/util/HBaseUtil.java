@@ -1,6 +1,7 @@
-package com.example.db.hbase;
+package com.example.util;
 
 import com.example.model.dao.StoredClient;
+import com.example.model.dao.StoredJob;
 import com.example.model.dto.Client;
 import com.example.model.request.CreateClientRequest;
 
@@ -22,5 +23,13 @@ public abstract class HBaseUtil {
                 .active(storedClient.isActive())
                 .build();
     }
+
+    public static StoredJob dao(String clientId) {
+        return StoredJob.builder()
+                .clientId(clientId)
+                .active(true)
+                .build();
+    }
+
 
 }

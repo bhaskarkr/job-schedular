@@ -1,7 +1,7 @@
 package com.example.service.impl;
 
 import com.example.db.hbase.ClientRepository;
-import com.example.db.hbase.HBaseUtil;
+import com.example.util.HBaseUtil;
 import com.example.model.dto.Client;
 import com.example.model.request.CreateClientRequest;
 import com.example.service.ClientService;

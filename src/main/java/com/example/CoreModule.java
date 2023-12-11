@@ -7,12 +7,18 @@ import com.example.service.impl.JobServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import io.dropwizard.core.setup.Environment;
+import io.dropwizard.lifecycle.setup.ScheduledExecutorServiceBuilder;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  *  Author : Bhaskar Kumar
  *  Date : 9 Dec 2023
  */
 public class CoreModule extends AbstractModule {
+
+
 
     @Override
     protected void configure() {
@@ -21,7 +27,12 @@ public class CoreModule extends AbstractModule {
     }
 
     @Provides
-    public ObjectMapper provideObjectMapper() {
-        return new ObjectMapper();
+    public ObjectMapper provideObjectMapper(Environment environment) {
+        return environment.getObjectMapper();
+    }
+
+    @Provides
+    public ScheduledExecutorService provideScheduledExecutorService(Environment environment) {
+        return environment.lifecycle().scheduledExecutorService("job-scheduler").build();
     }
 }

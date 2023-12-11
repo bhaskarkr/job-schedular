@@ -4,8 +4,6 @@ import com.example.db.hbase.TaskRepository;
 import com.example.model.dao.StoredTask;
 import com.example.scheduler.loadbalancer.LoadBalancedWorker;
 import com.example.util.JobUtil;
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +27,9 @@ public class Worker implements Runnable, LoadBalancedWorker {
     private static final byte[] TASK_META_DATA = "data".getBytes();
 
     private AtomicBoolean active;
-    private String clientId;
-    private TaskRepository taskRepository;
-    private ObjectMapper objectMapper;
+    private final String clientId;
+    private final TaskRepository taskRepository;
+    private final ObjectMapper objectMapper;
 
     @Builder
     public Worker(String clientId,
@@ -54,7 +52,7 @@ public class Worker implements Runnable, LoadBalancedWorker {
 
     @Override
     public void run() {
-
+        activate();
         // TODO : Add multiple worker for each client for cleanup as well
         Instant startTime = Instant.now();
         try {
@@ -64,13 +62,15 @@ public class Worker implements Runnable, LoadBalancedWorker {
             }
             final Date currentDate = new Date();
 
-            long start = JobUtil.nextDate(currentDate, -1, ChronoUnit.SECONDS).getTime();
-            long end = currentDate.getTime();
+
+            long end = JobUtil.nextDate(currentDate, 5, ChronoUnit.MINUTES).getTime();
+            long start = new Date().getTime();
             byte[] startRowKey = Bytes.toBytes(String.format("%s:%015d", clientId, start));
             byte[] endRowKey = Bytes.toBytes(String.format("%s:%015d", clientId, end));
+            log.info("start : {} , end : {}", String.format("%s:%015d", clientId, start), String.format("%s:%015d", clientId, end));
             Scan scan = new Scan()
-                    .withStartRow(startRowKey)
-                    .withStopRow(endRowKey)
+                    .withStartRow(startRowKey, true)
+                    .withStopRow(endRowKey, true)
                     .setCacheBlocks(false)
                     .setCaching(0)
                     .addColumn(TASK_META_DATA_CF, TASK_META_DATA);
@@ -89,10 +89,12 @@ public class Worker implements Runnable, LoadBalancedWorker {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            log.info(objectMapper.writeValueAsString(tasks));
         } catch (Throwable t) {
             log.error(t.getMessage());
         }
+
         Instant endTime = Instant.now();
-        log.info("Worker life span : {} to {}.", startTime, endTime);
+        log.info("client {} : Worker life span : {} to {}.", clientId, startTime, endTime);
     }
 }

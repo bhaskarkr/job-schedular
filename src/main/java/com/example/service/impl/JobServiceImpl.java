@@ -85,7 +85,7 @@ public class JobServiceImpl implements JobService {
                 try {
                     Put taskPut = new Put(getTaskRowKey(request.getClientId(), storedJob.getJobId(), executionDate))
                             .addColumn(TASK_META_DATA_CF, TASK_META_JOB_ID, storedJob.getJobId().getBytes())
-                            .addColumn(TASK_META_DATA_CF, TASK_META_DATA, objectMapper.writeValueAsBytes(storedJob));
+                            .addColumn(TASK_META_DATA_CF, TASK_META_DATA, objectMapper.writeValueAsBytes(storedTask));
                     jobPut.addColumn(JOB_TASK_CF, storedTask.getTaskId().getBytes(), objectMapper.writeValueAsBytes(storedTask));
                     taskPutList.add(taskPut);
                 } catch (JsonProcessingException e) {

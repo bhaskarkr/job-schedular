@@ -2,7 +2,11 @@ package com.example;
 
 import com.example.api.ClientApi;
 import com.example.db.hbase.HBaseModule;
+import com.example.rabbitmq.RabbitMQModule;
 import com.google.inject.Stage;
+import io.appform.dropwizard.actors.RabbitmqActorBundle;
+import io.appform.dropwizard.actors.TtlConfig;
+import io.appform.dropwizard.actors.config.RMQConfig;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
 import io.dropwizard.core.setup.Environment;
@@ -23,11 +27,28 @@ public class JobSchedulerApplication extends Application<JobSchedulerConfigurati
 
     @Override
     public void initialize(final Bootstrap<JobSchedulerConfiguration> bootstrap) {
+
+        var rabbitmqActorBundle = new RabbitmqActorBundle<JobSchedulerConfiguration>() {
+            @Override
+            protected TtlConfig ttlConfig() {
+                return TtlConfig.builder()
+                        .ttlEnabled(false)
+                        .build();
+            }
+
+            @Override
+            protected RMQConfig getConfig(JobSchedulerConfiguration jobSchedulerConfiguration) {
+                return jobSchedulerConfiguration.getRmqConfig();
+            }
+        };
+        bootstrap.addBundle(rabbitmqActorBundle);
+
         this.guiceBundle = GuiceBundle.builder()
                 .enableAutoConfig(getClass().getPackage().getName())
                 .modules(
                         new HBaseModule(),
-                        new CoreModule()
+                        new CoreModule(),
+                        new RabbitMQModule(rabbitmqActorBundle)
                 )
                 .build(Stage.PRODUCTION);
         bootstrap.addBundle(guiceBundle);

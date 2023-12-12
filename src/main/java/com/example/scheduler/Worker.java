@@ -2,6 +2,7 @@ package com.example.scheduler;
 
 import com.example.db.hbase.TaskRepository;
 import com.example.model.dao.StoredTask;
+import com.example.rabbitmq.ClientTaskActor;
 import com.example.scheduler.loadbalancer.LoadBalancedWorker;
 import com.example.util.JobUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,15 +31,18 @@ public class Worker implements Runnable, LoadBalancedWorker {
     private final String clientId;
     private final TaskRepository taskRepository;
     private final ObjectMapper objectMapper;
+    private final ClientTaskActor clientTaskActor;
 
     @Builder
     public Worker(String clientId,
                   TaskRepository taskRepository,
-                  ObjectMapper objectMapper) {
+                  ObjectMapper objectMapper,
+                  ClientTaskActor clientTaskActor) {
         this.active = new AtomicBoolean(false);
         this.taskRepository = taskRepository;
         this.clientId = clientId;
         this.objectMapper = objectMapper;
+        this.clientTaskActor = clientTaskActor;
     }
     @Override
     public void activate() {
@@ -86,6 +90,14 @@ public class Worker implements Runnable, LoadBalancedWorker {
                             }
                         })
                         .collect(Collectors.toList());
+                tasks.forEach(task -> {
+                    try {
+                        log.info("Published");
+                        clientTaskActor.publish(clientId, task);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -28,6 +28,7 @@ public class JobSchedulerApplication extends Application<JobSchedulerConfigurati
     @Override
     public void initialize(final Bootstrap<JobSchedulerConfiguration> bootstrap) {
 
+        // RABBIT MQ
         var rabbitmqActorBundle = new RabbitmqActorBundle<JobSchedulerConfiguration>() {
             @Override
             protected TtlConfig ttlConfig() {
@@ -43,6 +44,7 @@ public class JobSchedulerApplication extends Application<JobSchedulerConfigurati
         };
         bootstrap.addBundle(rabbitmqActorBundle);
 
+        // GUICE
         this.guiceBundle = GuiceBundle.builder()
                 .enableAutoConfig(getClass().getPackage().getName())
                 .modules(

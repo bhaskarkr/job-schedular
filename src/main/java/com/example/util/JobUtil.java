@@ -1,11 +1,11 @@
 package com.example.util;
 
-import com.example.model.dao.StoredJob;
-import com.example.model.request.ScheduleType;
+import com.example.model.request.schedule.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -21,23 +21,29 @@ public abstract class JobUtil {
         return Date.from(future.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public static List<Date> getTaskExecutionTime(ScheduleType scheduleType,
-                                                  List<Date> executionTimes,
-                                                  long interval,
-                                                  ChronoUnit unit,
-                                                  Date endDate) {
-        // TODO : Add visitor
-        if(ScheduleType.REPEAT.equals(scheduleType) && !executionTimes.isEmpty()) {
-            Date startDate = executionTimes.get(0);
-            if(Objects.isNull(endDate)) {
-                endDate = nextDate(startDate, 1, ChronoUnit.YEARS);
+    public static List<Date> getTaskExecutionTime(ScheduleRequest scheduleRequest) {
+        return scheduleRequest.accept(new ScheduleRequestVisitor<List<Date>>() {
+            @Override
+            public List<Date> visit(OnceScheduleRequest request) {
+                return List.of(request.getExecuteAt());
             }
-            while(startDate.before(endDate)) {
-                Date nextDate = nextDate(startDate, interval, unit);
-                executionTimes.add(new Date(nextDate.getTime()));
-                startDate = nextDate;
+
+            @Override
+            public List<Date> visit(RecurringScheduleRequest request) {
+                return request.getExecutionDates();
             }
-        }
-        return executionTimes;
+
+            @Override
+            public List<Date> visit(RepeatScheduleRequest request) {
+                List<Date> executionTimes = new ArrayList<>();
+                Date startDate = request.getStartExecutionDate();
+                while(startDate.before(request.getEndExecutionDate())) {
+                    Date nextDate = nextDate(startDate, request.getInterval(), request.getIntervalUnit());
+                    executionTimes.add(new Date(nextDate.getTime()));
+                    startDate = nextDate;
+                }
+                return executionTimes;
+            }
+        });
     }
 }

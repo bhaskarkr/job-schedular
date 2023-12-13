@@ -18,8 +18,6 @@ import java.util.concurrent.ScheduledExecutorService;
  */
 public class CoreModule extends AbstractModule {
 
-
-
     @Override
     protected void configure() {
         bind(ClientService.class).to(ClientServiceImpl.class);

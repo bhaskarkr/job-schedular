@@ -62,8 +62,7 @@ public class JobServiceImpl implements JobService {
 
     @Override
     public void save(CreateJobRequest request) {
-        List<Date> executionDates = JobUtil.getTaskExecutionTime(request.getScheduleType(),
-                request.getExecutionTime(), request.getInterval(), request.getIntervalUnit(), request.getEndDate());
+        List<Date> executionDates = JobUtil.getTaskExecutionTime(request.getScheduleRequest());
         List<Put> taskPutList = new ArrayList<>();
         StoredJob storedJob = StoredJob.builder()
                 .clientId(request.getClientId())

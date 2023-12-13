@@ -7,6 +7,7 @@ import com.example.model.dao.StoredTask;
 import com.example.model.dto.Job;
 import com.example.model.request.CreateJobRequest;
 import com.example.service.JobService;
+import com.example.util.Constants;
 import com.example.util.JobUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import static com.example.util.Constants.*;
+
 /**
  *  Author : Bhaskar Kumar
  *  Date : 9 Dec 2023
@@ -28,13 +31,6 @@ import java.util.UUID;
 @Singleton
 @Slf4j
 public class JobServiceImpl implements JobService {
-
-    private static final byte[] TASK_META_DATA_CF = "meta".getBytes();
-    private static final byte[] JOB_META_DATA_CF = "meta".getBytes();
-    private static final byte[] TASK_META_DATA = "data".getBytes();
-    private static final byte[] JOB_META_DATA = "data".getBytes();
-    private static final byte[] TASK_META_JOB_ID = "jobId".getBytes();
-    private static final byte[] JOB_TASK_CF = "tasks".getBytes();
     private final JobRepository jobRepository;
     private final TaskRepository taskRepository;
     private final ObjectMapper objectMapper;
@@ -64,22 +60,13 @@ public class JobServiceImpl implements JobService {
     public void save(CreateJobRequest request) {
         List<Date> executionDates = JobUtil.getTaskExecutionTime(request.getScheduleRequest());
         List<Put> taskPutList = new ArrayList<>();
-        StoredJob storedJob = StoredJob.builder()
-                .clientId(request.getClientId())
-                .active(true)
-                .jobId(UUID.randomUUID().toString())
-                .build();
+        StoredJob storedJob = JobUtil.toDao(request.getClientId());
         String jobRowKey = request.getClientId() + ":" + storedJob.getJobId();
         Put jobPut = new Put(jobRowKey.getBytes());
         try {
             jobPut.addColumn(JOB_META_DATA_CF, JOB_META_DATA, objectMapper.writeValueAsBytes(storedJob));
             executionDates.forEach(executionDate -> {
-                StoredTask storedTask = StoredTask.builder()
-                        .taskId(UUID.randomUUID().toString())
-                        .jobId(storedJob.getJobId())
-                        .executeAt(executionDate)
-                        .clientId(request.getClientId())
-                        .build();
+                StoredTask storedTask = JobUtil.toDao(storedJob.getJobId(), executionDate, request.getClientId());
                 log.info(executionDate.toString());
                 try {
                     Put taskPut = new Put(getTaskRowKey(request.getClientId(), storedJob.getJobId(), executionDate))

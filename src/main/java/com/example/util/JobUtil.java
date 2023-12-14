@@ -2,6 +2,7 @@ package com.example.util;
 
 import com.example.model.dao.StoredJob;
 import com.example.model.dao.StoredTask;
+import com.example.model.request.CreateJobRequest;
 import com.example.model.request.schedule.*;
 
 import java.time.LocalDateTime;
@@ -24,12 +25,14 @@ public abstract class JobUtil {
     }
     public static StoredTask toDao(final String jobId,
                                  final Date executionDate,
-                                 final String clientId) {
+                                 final CreateJobRequest request) {
         return StoredTask.builder()
                 .taskId(UUID.randomUUID().toString())
                 .jobId(jobId)
+                .url(request.getUrl())
+                .payload(request.getPayload())
                 .executeAt(executionDate)
-                .clientId(clientId)
+                .clientId(request.getClientId())
                 .build();
     }
     public static Date nextDate(Date currentDate, long interval, ChronoUnit unit) {

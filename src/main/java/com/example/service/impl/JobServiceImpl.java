@@ -66,7 +66,7 @@ public class JobServiceImpl implements JobService {
         try {
             jobPut.addColumn(JOB_META_DATA_CF, JOB_META_DATA, objectMapper.writeValueAsBytes(storedJob));
             executionDates.forEach(executionDate -> {
-                StoredTask storedTask = JobUtil.toDao(storedJob.getJobId(), executionDate, request.getClientId());
+                StoredTask storedTask = JobUtil.toDao(storedJob.getJobId(), executionDate, request);
                 log.info(executionDate.toString());
                 try {
                     Put taskPut = new Put(getTaskRowKey(request.getClientId(), storedJob.getJobId(), executionDate))

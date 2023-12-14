@@ -67,7 +67,7 @@ public class Worker implements Runnable, LoadBalancedWorker {
             final Date currentDate = new Date();
 
 
-            long end = JobUtil.nextDate(currentDate, 5, ChronoUnit.MINUTES).getTime();
+            long end = JobUtil.nextDate(currentDate, 30, ChronoUnit.MINUTES).getTime();
             long start = new Date().getTime();
             byte[] startRowKey = Bytes.toBytes(String.format("%s:%015d", clientId, start));
             byte[] endRowKey = Bytes.toBytes(String.format("%s:%015d", clientId, end));

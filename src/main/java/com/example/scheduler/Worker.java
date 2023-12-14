@@ -1,12 +1,15 @@
 package com.example.scheduler;
 
 import com.example.db.hbase.TaskRepository;
+import com.example.model.config.ScanConfig;
+import com.example.model.config.WorkerScanConfig;
 import com.example.model.dao.StoredTask;
 import com.example.rabbitmq.ClientTaskActor;
 import com.example.scheduler.loadbalancer.LoadBalancedWorker;
 import com.example.util.JobUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -23,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Getter
 public class Worker implements Runnable, LoadBalancedWorker {
     private static final byte[] TASK_META_DATA_CF = "meta".getBytes();
     private static final byte[] TASK_META_DATA = "data".getBytes();
@@ -32,17 +36,20 @@ public class Worker implements Runnable, LoadBalancedWorker {
     private final TaskRepository taskRepository;
     private final ObjectMapper objectMapper;
     private final ClientTaskActor clientTaskActor;
+    private final ScanConfig scanConfig;
 
     @Builder
     public Worker(String clientId,
                   TaskRepository taskRepository,
                   ObjectMapper objectMapper,
-                  ClientTaskActor clientTaskActor) {
+                  ClientTaskActor clientTaskActor,
+                  ScanConfig scanConfig) {
         this.active = new AtomicBoolean(false);
         this.taskRepository = taskRepository;
         this.clientId = clientId;
         this.objectMapper = objectMapper;
         this.clientTaskActor = clientTaskActor;
+        this.scanConfig = scanConfig;
     }
     @Override
     public void activate() {
@@ -65,8 +72,6 @@ public class Worker implements Runnable, LoadBalancedWorker {
                 return;
             }
             final Date currentDate = new Date();
-
-
             long end = JobUtil.nextDate(currentDate, 30, ChronoUnit.MINUTES).getTime();
             long start = new Date().getTime();
             byte[] startRowKey = Bytes.toBytes(String.format("%s:%015d", clientId, start));
@@ -107,6 +112,6 @@ public class Worker implements Runnable, LoadBalancedWorker {
         }
 
         Instant endTime = Instant.now();
-        log.info("client {} : Worker life span : {} to {}.", clientId, startTime, endTime);
+        log.info("client {} worker-type {} : Worker life span : {} to {}.", clientId, scanConfig.getName(), startTime, endTime);
     }
 }

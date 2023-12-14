@@ -21,3 +21,15 @@ rmqConfig:
   connections:
     - name: default
       threadPoolSize: 60
+
+workerScanConfig:
+  scanConfigList:
+    - name : secondProcessor
+      interval : 1
+      chronoUnit : SECONDS
+    - name : hourProcessor
+      interval : 60
+      chronoUnit : MINUTES
+    - name : dayProcessor
+      interval : 24
+      chronoUnit : HOURS

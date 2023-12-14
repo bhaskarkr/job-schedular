@@ -65,7 +65,8 @@ public class Scheduler implements Managed {
                                 connectionRegistry,
                                 objectMapper,
                                 exceptionHandlingFactory,
-                                jobSchedulerConfiguration))
+                                jobSchedulerConfiguration),
+                        jobSchedulerConfiguration.getWorkerScanConfig())
         ).collect(Collectors.toList());
         temp.forEach(clientTaskExtractor -> {
             try {

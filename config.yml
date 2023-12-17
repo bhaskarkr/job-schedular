@@ -3,3 +3,33 @@ logging:
   level: INFO
   loggers:
     com.example: DEBUG
+
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 5050
+
+rmqConfig:
+  brokers:
+    - host: localhost
+      port: 5672
+  userName: guest
+  password: guest
+  threadPoolSize: 100
+  secure: false
+  connections:
+    - name: default
+      threadPoolSize: 60
+
+workerScanConfig:
+  scanConfigList:
+    - name : secondProcessor
+      interval : 1
+      chronoUnit : SECONDS
+    - name : hourProcessor
+      interval : 60
+      chronoUnit : MINUTES
+    - name : dayProcessor
+      interval : 24
+      chronoUnit : HOURS

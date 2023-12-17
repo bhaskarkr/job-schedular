@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <dropwizard.version>4.0.4</dropwizard.version>
-        <mainClass>com.example.jobschedulerApplication</mainClass>
+        <mainClass>com.example.JobSchedulerApplication</mainClass>
     </properties>
 
     <dependencyManagement>
@@ -49,6 +49,53 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+
+        <!-- GUICE -->
+        <dependency>
+            <groupId>ru.vyarus</groupId>
+            <artifactId>dropwizard-guicey</artifactId>
+            <version>7.0.1</version>
+        </dependency>
+        <!-- GUICE -->
+
+        <!-- HBASE -->
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-client</artifactId>
+            <version>3.0.0-alpha-4</version>
+        </dependency>
+        <!-- HBASE -->
+
+        <!-- LOMBOK -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+        </dependency>
+        <!-- LOMBOK -->
+
+        <!-- RABBIT MQ -->
+        <dependency>
+            <groupId>io.appform.dropwizard.actors</groupId>
+            <artifactId>dropwizard-rabbitmq-actors</artifactId>
+            <version>2.0.28-8-CUSTOM</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rabbitmq</groupId>
+            <artifactId>amqp-client</artifactId>
+            <version>5.16.0</version>
+        </dependency>
+        <!-- RABBIT MQ -->
+
+        <!-- OK HTTP -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.10.0</version>
+        </dependency>
+        <!-- OK HTTP -->
+
+
     </dependencies>
 
     <build>

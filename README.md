@@ -13,6 +13,13 @@ Download dropwizard RabbitMQ actor for 4.x.x
 https://github.com/bhaskarkr/dropwizard-db-sharding-bundle/tree/dropwizard-4xx
 ```
 
+## HBase
+```
+create 'clients', 'meta'
+create 'jobs', 'meta', 'tasks'
+create 'tasks', 'meta'
+```
+
 ## APIs
 #### Add client
 ```

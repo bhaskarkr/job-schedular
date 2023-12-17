@@ -7,7 +7,6 @@ import com.example.model.dao.StoredTask;
 import com.example.model.dto.Job;
 import com.example.model.request.CreateJobRequest;
 import com.example.service.JobService;
-import com.example.util.Constants;
 import com.example.util.JobUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static com.example.util.Constants.*;
 
@@ -60,7 +58,7 @@ public class JobServiceImpl implements JobService {
     public void save(CreateJobRequest request) {
         List<Date> executionDates = JobUtil.getTaskExecutionTime(request.getScheduleRequest());
         List<Put> taskPutList = new ArrayList<>();
-        StoredJob storedJob = JobUtil.toDao(request.getClientId());
+        StoredJob storedJob = JobUtil.toDao(request);
         String jobRowKey = request.getClientId() + ":" + storedJob.getJobId();
         Put jobPut = new Put(jobRowKey.getBytes());
         try {

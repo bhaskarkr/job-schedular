@@ -18,8 +18,5 @@ public class StoredTask {
     private String clientId;
     private String jobId;
     private String taskId;
-    private String payload;
-    private String url;
-    private Map<String, String> headers;
     private Date executeAt;
 }

@@ -1,7 +1,5 @@
-package com.example.model.request;
+package com.example.model.request.schedule;
 
-import com.example.model.request.schedule.CallType;
-import com.example.model.request.schedule.ScheduleRequest;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,12 +13,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CreateJobRequest {
-    private String clientId;
-    private String url;
+public class HttpCallRequest {
     private CallType callType;
     private String payload;
+    private String url;
     private Map<String, String> headers;
-    private ScheduleRequest scheduleRequest;
 }
-

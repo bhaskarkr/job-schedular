@@ -2,6 +2,7 @@ package com.example.util;
 
 import com.example.model.dao.StoredJob;
 import com.example.model.dao.StoredTask;
+import com.example.model.dto.Job;
 import com.example.model.request.CreateJobRequest;
 import com.example.model.request.schedule.*;
 
@@ -16,21 +17,35 @@ import java.util.*;
  */
 public abstract class JobUtil {
 
-    public static StoredJob toDao(final String clientId) {
+    public static StoredJob toDao(final CreateJobRequest request) {
         return StoredJob.builder()
-                .clientId(clientId)
+                .clientId(request.getClientId())
                 .active(true)
+                .callType(request.getCallType())
                 .jobId(UUID.randomUUID().toString())
+                .url(request.getUrl())
+                .payload(request.getPayload())
+                .headers(request.getHeaders())
                 .build();
     }
+
+    public static Job toDto(final StoredJob storedJob) {
+        return Job.builder()
+                .clientId(storedJob.getClientId())
+                .active(storedJob.isActive())
+                .jobId(storedJob.getJobId())
+                .url(storedJob.getUrl())
+                .payload(storedJob.getPayload())
+                .headers(storedJob.getHeaders())
+                .build();
+    }
+
     public static StoredTask toDao(final String jobId,
                                  final Date executionDate,
                                  final CreateJobRequest request) {
         return StoredTask.builder()
                 .taskId(UUID.randomUUID().toString())
                 .jobId(jobId)
-                .url(request.getUrl())
-                .payload(request.getPayload())
                 .executeAt(executionDate)
                 .clientId(request.getClientId())
                 .build();

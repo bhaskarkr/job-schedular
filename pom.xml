@@ -74,6 +74,7 @@
         </dependency>
         <!-- LOMBOK -->
 
+        <!-- RABBIT MQ -->
         <dependency>
             <groupId>io.appform.dropwizard.actors</groupId>
             <artifactId>dropwizard-rabbitmq-actors</artifactId>
@@ -84,6 +85,17 @@
             <artifactId>amqp-client</artifactId>
             <version>5.16.0</version>
         </dependency>
+        <!-- RABBIT MQ -->
+
+        <!-- OK HTTP -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.10.0</version>
+        </dependency>
+        <!-- OK HTTP -->
+
+
     </dependencies>
 
     <build>

@@ -10,5 +10,5 @@ public interface JobRepository {
     Table getTable();
     List<StoredJob> getAll();
     StoredJob get(final String clientName);
-    void save(StoredJob storedClient);
+    void save(StoredJob storedJob);
 }

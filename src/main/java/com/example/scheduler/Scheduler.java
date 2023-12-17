@@ -1,6 +1,7 @@
 package com.example.scheduler;
 
 import com.example.JobSchedulerConfiguration;
+import com.example.db.hbase.JobRepository;
 import com.example.db.hbase.TaskRepository;
 import com.example.model.dto.Client;
 import com.example.rabbitmq.ClientTaskActor;
@@ -12,7 +13,6 @@ import io.appform.dropwizard.actors.ConnectionRegistry;
 import io.appform.dropwizard.actors.exceptionhandler.ExceptionHandlingFactory;
 import io.dropwizard.lifecycle.Managed;
 import lombok.extern.slf4j.Slf4j;
-import ru.vyarus.dropwizard.guice.module.installer.order.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,27 +25,34 @@ public class Scheduler implements Managed {
     private final ClientService clientService;
     private final ObjectMapper objectMapper;
     private final TaskRepository taskRepository;
+    private final JobRepository jobRepository;
     private List<ClientTaskExtractor> clientTaskExtractorList = new ArrayList<>();
     private final ScheduledExecutorService scheduledExecutorService;
     private final ConnectionRegistry connectionRegistry;
     private final ExceptionHandlingFactory exceptionHandlingFactory;
     private final JobSchedulerConfiguration jobSchedulerConfiguration;
+    private final ClientHttpCallHandler clientHttpCallHandler;
 
     @Inject
     public Scheduler(ClientService clientService,
                      TaskRepository taskRepository,
+                     JobRepository jobRepository,
                      ObjectMapper objectMapper,
                      ScheduledExecutorService scheduledExecutorService,
                      ConnectionRegistry connectionRegistry,
                      ExceptionHandlingFactory exceptionHandlingFactory,
-                     JobSchedulerConfiguration jobSchedulerConfiguration) {
+                     JobSchedulerConfiguration jobSchedulerConfiguration,
+                     ClientHttpCallHandler clientHttpCallHandler) {
         this.clientService = clientService;
         this.objectMapper = objectMapper;
         this.taskRepository = taskRepository;
+        this.jobRepository = jobRepository;
         this.scheduledExecutorService = scheduledExecutorService;
         this.connectionRegistry = connectionRegistry;
         this.exceptionHandlingFactory = exceptionHandlingFactory;
         this.jobSchedulerConfiguration = jobSchedulerConfiguration;
+        this.clientHttpCallHandler = clientHttpCallHandler;
+
     }
 
     @Override
@@ -64,8 +71,11 @@ public class Scheduler implements Managed {
                                 client,
                                 connectionRegistry,
                                 objectMapper,
+                                jobRepository,
+                                taskRepository,
                                 exceptionHandlingFactory,
-                                jobSchedulerConfiguration),
+                                jobSchedulerConfiguration,
+                                clientHttpCallHandler),
                         jobSchedulerConfiguration.getWorkerScanConfig())
         ).collect(Collectors.toList());
         temp.forEach(clientTaskExtractor -> {

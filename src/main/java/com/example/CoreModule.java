@@ -1,6 +1,7 @@
 package com.example;
 
 import com.example.model.config.WorkerScanConfig;
+import com.example.scheduler.ClientHttpCallHandler;
 import com.example.service.ClientService;
 import com.example.service.JobService;
 import com.example.service.impl.ClientServiceImpl;
@@ -42,5 +43,11 @@ public class CoreModule extends AbstractModule {
     @Singleton
     public WorkerScanConfig provideWorkerScanConfig(JobSchedulerConfiguration jobSchedulerConfiguration) {
         return jobSchedulerConfiguration.getWorkerScanConfig();
+    }
+
+    @Provides
+    @Singleton
+    public ClientHttpCallHandler provideClientHttpCallHandler() {
+        return new ClientHttpCallHandler();
     }
 }

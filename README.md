@@ -54,6 +54,9 @@ Download dropwizard RabbitMQ actor for 4.x.x
 ```
 https://github.com/bhaskarkr/dropwizard-db-sharding-bundle/tree/dropwizard-4xx
 ```
+```
+brew install rabbitmq
+```
 
 ## HBase
 #### CREATE

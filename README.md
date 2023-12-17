@@ -14,10 +14,20 @@ https://github.com/bhaskarkr/dropwizard-db-sharding-bundle/tree/dropwizard-4xx
 ```
 
 ## HBase
+#### CREATE
 ```
 create 'clients', 'meta'
 create 'jobs', 'meta', 'tasks'
 create 'tasks', 'meta'
+```
+#### SCAN / SEARCH
+```
+scan 'tasks', {STARTROW => 'task9:001701510915564', ENDROW => 'task9:001703512715534'}
+scan 'tasks'
+```
+#### CLEAR TABLE
+```
+truncate 'tasks'
 ```
 
 ## APIs
@@ -76,7 +86,6 @@ curl --location 'http://localhost:5050/v1/jobs' \
 ```
 curl --location 'http://localhost:5050/v1/jobs' \
 --header 'Content-Type: application/json' \
---header 'X-API-Key: {{token}}' \
 --data '{
     "clientId" : "test6",
     "url": "abc.com",
